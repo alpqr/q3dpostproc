@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>Scene.qml</file>
+        <file>NonLayeredRenderer.qml</file>
+        <file>LayeredRenderer.qml</file>
+        <file>TextureRenderTarget.qml</file>
+    </qresource>
+</RCC>
