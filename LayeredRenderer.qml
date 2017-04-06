@@ -14,7 +14,8 @@ RenderSurfaceSelector {
 
     // Pass 1: render the scene into a texture
 
-    TextureRenderTarget {
+    //TextureRenderTarget {
+    TextureRenderTargetMS {
         id: rt
         width: surfaceSelector.surface ? surfaceSelector.surface.width : 512
         height: surfaceSelector.surface ? surfaceSelector.surface.height : 512
@@ -76,7 +77,8 @@ RenderSurfaceSelector {
                         renderPasses: RenderPass {
                             shaderProgram: ShaderProgram {
                                 vertexShaderCode: loadSource("qrc:/compositor.vert")
-                                fragmentShaderCode: loadSource("qrc:/compositor.frag")
+                                //fragmentShaderCode: loadSource("qrc:/compositor.frag")
+                                fragmentShaderCode: loadSource("qrc:/compositor_ms.frag")
                             }
                             renderStates: [
                                 FrontFace {
