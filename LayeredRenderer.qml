@@ -10,7 +10,7 @@ RenderSurfaceSelector {
     property alias sceneLayer: sceneLayer
 
     Layer { id: sceneLayer }
-    Layer { id: compositingLayer }
+    Layer { id: compositorLayer }
 
     // Pass 1: render the scene into a texture
 
@@ -20,19 +20,18 @@ RenderSurfaceSelector {
         height: surfaceSelector.surface ? surfaceSelector.surface.height : 512
     }
 
-    ClearBuffers {
-        clearColor: Qt.rgba(0, 0.5, 1, 1)
-        buffers: ClearBuffers.ColorDepthBuffer
+    LayerFilter {
+        layers: [ sceneLayer ]
         RenderTargetSelector {
             target: rt
-            LayerFilter {
-                layers: [ sceneLayer ]
-                Viewport {
-                    normalizedRect: Qt.rect(0, 0, 1, 1)
-                    CameraSelector {
-                        id: cameraSelector
-                        FrustumCulling {
-                        }
+            Viewport {
+                normalizedRect: Qt.rect(0, 0, 1, 1)
+                CameraSelector {
+                    id: cameraSelector
+                    ClearBuffers {
+                        clearColor: Qt.rgba(0, 0.5, 1, 1)
+                        buffers: ClearBuffers.ColorDepthBuffer
+                        FrustumCulling { }
                     }
                 }
             }
@@ -43,9 +42,10 @@ RenderSurfaceSelector {
 
     Entity {
         components: [
-            compositingLayer,
+            compositorLayer,
             quadMesh,
-            quadTrans
+            quadTrans,
+            compositorMaterial
         ]
 
         PlaneMesh {
@@ -57,13 +57,13 @@ RenderSurfaceSelector {
         Transform {
             id: quadTrans
             rotationX: -90
-            rotationY: 180
         }
 
         Material {
-//            parameters: [
-//                Parameter { name: "sceneColor"; value: frameGraph.sceneColorTexture }
-//            ]
+            id: compositorMaterial
+            parameters: [
+                Parameter { name: "tex"; value: rt.colorTexture }
+            ]
             effect: Effect {
                 techniques: [
                     Technique {
@@ -74,10 +74,15 @@ RenderSurfaceSelector {
                             profile: GraphicsApiFilter.CoreProfile
                         }
                         renderPasses: RenderPass {
-//                            shaderProgram: ShaderProgram {
-//                                vertexShaderCode: loadSource("qrc:/compositor.vert")
-//                                fragmentShaderCode: loadSource("qrc:/compositor.frag")
-//                            }
+                            shaderProgram: ShaderProgram {
+                                vertexShaderCode: loadSource("qrc:/compositor.vert")
+                                fragmentShaderCode: loadSource("qrc:/compositor.frag")
+                            }
+                            renderStates: [
+                                FrontFace {
+                                    direction: FrontFace.ClockWise
+                                }
+                            ]
                         }
                     }
                 ]
@@ -86,7 +91,7 @@ RenderSurfaceSelector {
     }
 
     Camera {
-        id: compositingCamera
+        id: compositorCamera
         left: -1
         right: 1
         bottom: -1
@@ -97,14 +102,14 @@ RenderSurfaceSelector {
     }
 
     LayerFilter {
-        layers: [ compositingLayer ]
-        ClearBuffers {
-            clearColor: "black"
-            buffers: ClearBuffers.ColorDepthBuffer
-            Viewport {
-                normalizedRect: Qt.rect(0, 0, 1, 1)
-                CameraSelector {
-                    camera: compositingCamera
+        layers: [ compositorLayer ]
+        Viewport {
+            normalizedRect: Qt.rect(0, 0, 1, 1)
+            CameraSelector {
+                camera: compositorCamera
+                ClearBuffers {
+                    clearColor: "black"
+                    buffers: ClearBuffers.ColorDepthBuffer
                 }
             }
         }

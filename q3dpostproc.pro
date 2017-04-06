@@ -10,7 +10,9 @@ OTHER_FILES += \
     Scene.qml \
     NonLayeredRenderer.qml \
     LayeredRenderer.qml \
-    TextureRenderTarget.qml
+    TextureRenderTarget.qml \
+    compositor.vert \
+    compositor.frag
 
 RESOURCES += \
     q3dpostproc.qrc

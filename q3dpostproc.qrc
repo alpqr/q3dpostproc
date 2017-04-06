@@ -5,5 +5,7 @@
         <file>NonLayeredRenderer.qml</file>
         <file>LayeredRenderer.qml</file>
         <file>TextureRenderTarget.qml</file>
+        <file>compositor.vert</file>
+        <file>compositor.frag</file>
     </qresource>
 </RCC>
