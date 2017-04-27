@@ -6,11 +6,13 @@ import Qt3D.Extras 2.0
 RenderSurfaceSelector {
     id: surfaceSelector
 
-    property alias sceneCamera: cameraSelector.camera
     property alias sceneLayer: sceneLayer
-
     Layer { id: sceneLayer }
     Layer { id: compositorLayer }
+
+    FirstPersonCameraController {
+        camera: sceneCamera
+    }
 
     // Pass 1: render the scene into a texture
 
@@ -29,6 +31,15 @@ RenderSurfaceSelector {
                 normalizedRect: Qt.rect(0, 0, 1, 1)
                 CameraSelector {
                     id: cameraSelector
+                    camera: Camera {
+                        id: sceneCamera
+                        projectionType: CameraLens.PerspectiveProjection
+                        fieldOfView: 45
+                        aspectRatio: rt.width / rt.height
+                        position: Qt.vector3d( 0.0, 0.0, -40.0 )
+                        upVector: Qt.vector3d( 0.0, 1.0, 0.0 )
+                        viewCenter: Qt.vector3d( 0.0, 0.0, 0.0 )
+                    }
                     ClearBuffers {
                         clearColor: Qt.rgba(0, 0.5, 1, 1)
                         buffers: ClearBuffers.ColorDepthBuffer
