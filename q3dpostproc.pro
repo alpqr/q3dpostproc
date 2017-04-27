@@ -8,8 +8,7 @@ SOURCES += \
 OTHER_FILES += \
     main.qml \
     Scene.qml \
-    NonLayeredRenderer.qml \
-    LayeredRenderer.qml \
+    OffscreenLayer.qml \
     TextureRenderTarget.qml \
     TextureRenderTargetMS.qml \
     compositor.vert \

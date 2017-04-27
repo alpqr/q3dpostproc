@@ -2,8 +2,7 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>Scene.qml</file>
-        <file>NonLayeredRenderer.qml</file>
-        <file>LayeredRenderer.qml</file>
+        <file>OffscreenLayer.qml</file>
         <file>TextureRenderTarget.qml</file>
         <file>TextureRenderTargetMS.qml</file>
         <file>compositor.vert</file>
