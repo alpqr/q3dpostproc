@@ -13,7 +13,9 @@ OTHER_FILES += \
     TextureRenderTargetMS.qml \
     compositor.vert \
     compositor.frag \
-    compositor_ms.frag
+    compositor_ms.frag \
+    scene.vert \
+    scene.frag
 
 RESOURCES += \
     q3dpostproc.qrc

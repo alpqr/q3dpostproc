@@ -9,8 +9,29 @@ import Qt3D.Extras 2.0
 Entity {
     property variant targetLayer
 
-    PhongMaterial {
+    Material {
         id: material
+        effect: Effect {
+            techniques: [
+                Technique {
+                    graphicsApiFilter {
+                        api: GraphicsApiFilter.OpenGL
+                        majorVersion: 3
+                        minorVersion: 2
+                        profile: GraphicsApiFilter.CoreProfile
+                    }
+                    renderPasses: RenderPass {
+                        FilterKey { id: opaqueKey; name: "pass"; value: "opaque" }
+                        FilterKey { id: transKey; name: "pass"; value: "transparent" }
+                        filterKeys: [ opaqueKey, transKey  ]
+                        shaderProgram: ShaderProgram {
+                            vertexShaderCode: loadSource("qrc:/scene.vert")
+                            fragmentShaderCode: loadSource("qrc:/scene.frag")
+                        }
+                    }
+                }
+            ]
+        }
     }
 
     TorusMesh {

@@ -8,5 +8,7 @@
         <file>compositor.vert</file>
         <file>compositor.frag</file>
         <file>compositor_ms.frag</file>
+        <file>scene.frag</file>
+        <file>scene.vert</file>
     </qresource>
 </RCC>

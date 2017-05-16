@@ -10,6 +10,13 @@ Entity {
             activeFrameGraph: RenderSurfaceSelector {
                 id: surfaceSelector
 
+                // Offscreen framegraph
+                OffscreenLayer {
+                    id: offscreenLayer
+                    width: surfaceSelector.surface ? surfaceSelector.surface.width : 512
+                    height: surfaceSelector.surface ? surfaceSelector.surface.height : 512
+                }
+
                 // Compositor framegraph
                 LayerFilter {
                     layers: [ compositorLayer ]
@@ -23,13 +30,6 @@ Entity {
                             }
                         }
                     }
-                }
-
-                // Offscreen framegraph
-                OffscreenLayer {
-                    id: offscreenLayer
-                    width: surfaceSelector.surface ? surfaceSelector.surface.width : 512
-                    height: surfaceSelector.surface ? surfaceSelector.surface.height : 512
                 }
             }
         },
