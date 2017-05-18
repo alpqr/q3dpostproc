@@ -37,15 +37,17 @@ RenderTargetSelector {
                 upVector: Qt.vector3d( 0.0, 1.0, 0.0 )
                 viewCenter: Qt.vector3d( 0.0, 0.0, 0.0 )
             }
+            // clear first always (opaque list may be empty so ClearBuffers must not be a child there)
+            ClearBuffers {
+                clearColor: Qt.rgba(0, 0.5, 1, 1)
+                buffers: ClearBuffers.ColorDepthBuffer
+                NoDraw { }
+            }
             RenderPassFilter {
                 matchAny: [ FilterKey { name: "pass"; value: "opaque" } ]
-                ClearBuffers {
-                    clearColor: Qt.rgba(0, 0.5, 1, 1)
-                    buffers: ClearBuffers.ColorDepthBuffer
-                    FrustumCulling {
-                        LayerFilter {
-                            layers: [ sceneLayerOpaque ]
-                        }
+                FrustumCulling {
+                    LayerFilter {
+                        layers: [ sceneLayerOpaque ]
                     }
                 }
             }
