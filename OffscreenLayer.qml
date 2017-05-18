@@ -11,10 +11,12 @@ RenderTargetSelector {
     property alias width: rt.width
     property alias height: rt.height
 
-    Layer { id: sceneLayer }
+    Layer { id: sceneLayerOpaque }
+    Layer { id: sceneLayerTrans }
 
     Scene {
-        targetLayer: sceneLayer
+        targetLayerOpaque: sceneLayerOpaque
+        targetLayerTrans: sceneLayerTrans
         FirstPersonCameraController { camera: sceneCamera }
     }
 
@@ -42,16 +44,19 @@ RenderTargetSelector {
                     buffers: ClearBuffers.ColorDepthBuffer
                     FrustumCulling {
                         LayerFilter {
-                            layers: [ sceneLayer ]
+                            layers: [ sceneLayerOpaque ]
                         }
                     }
                 }
             }
             RenderPassFilter {
                 matchAny: [ FilterKey { name: "pass"; value: "transparent" } ]
-                FrustumCulling {
-                    LayerFilter {
-                        layers: [ sceneLayer ]
+                SortPolicy {
+                    sortTypes: [ SortPolicy.BackToFront ]
+                    FrustumCulling {
+                        LayerFilter {
+                            layers: [ sceneLayerTrans ]
+                        }
                     }
                 }
             }

@@ -7,28 +7,66 @@ import Qt3D.Input 2.0
 import Qt3D.Extras 2.0
 
 Entity {
-    property variant targetLayer
+    property variant targetLayerOpaque
+    property variant targetLayerTrans
 
     Material {
         id: material
         effect: Effect {
             techniques: [
                 Technique {
+                    FilterKey { id: opaqueKey; name: "pass"; value: "opaque" }
+                    FilterKey { id: transKey; name: "pass"; value: "transparent" }
                     graphicsApiFilter {
                         api: GraphicsApiFilter.OpenGL
                         majorVersion: 3
                         minorVersion: 2
                         profile: GraphicsApiFilter.CoreProfile
                     }
-                    renderPasses: RenderPass {
-                        FilterKey { id: opaqueKey; name: "pass"; value: "opaque" }
-                        FilterKey { id: transKey; name: "pass"; value: "transparent" }
-                        filterKeys: [ opaqueKey, transKey  ]
-                        shaderProgram: ShaderProgram {
-                            vertexShaderCode: loadSource("qrc:/scene.vert")
-                            fragmentShaderCode: loadSource("qrc:/scene.frag")
+
+                    // Here we are simulating the way a UI-oriented scenegraph
+                    // would work: First an opaque pass with depth testing
+                    // enabled. Then an optional transparent pass with no depth
+                    // writes, blending enabled and back-to-front sorting.
+
+                    renderPasses: [
+                        RenderPass {
+                            filterKeys: [ opaqueKey ]
+                            shaderProgram: ShaderProgram {
+                                vertexShaderCode: loadSource("qrc:/scene.vert")
+                                fragmentShaderCode: loadSource("qrc:/scene_o.frag")
+                            }
+                            renderStates: [
+                                DepthTest {
+                                    depthFunction: DepthTest.LessOrEqual
+                                }
+                            ]
+
+                        },
+                        RenderPass {
+                            filterKeys: [ transKey ]
+                            shaderProgram: ShaderProgram {
+                                vertexShaderCode: loadSource("qrc:/scene.vert")
+                                fragmentShaderCode: loadSource("qrc:/scene_t.frag")
+                            }
+                            renderStates: [
+                                DepthTest {
+                                    depthFunction: DepthTest.Always // best would be to disable depth testing altogether, but how?
+                                },
+                                NoDepthMask {
+                                },
+                                BlendEquation {
+                                    blendFunction: BlendEquation.Add
+                                },
+                                BlendEquationArguments {
+                                    sourceRgb: BlendEquationArguments.One
+                                    destinationRgb: BlendEquationArguments.OneMinusSourceAlpha
+                                    sourceAlpha: BlendEquationArguments.One
+                                    destinationAlpha: BlendEquationArguments.OneMinusSourceAlpha
+                                }
+                            ]
                         }
-                    }
+                    ]
                 }
             ]
         }
@@ -50,7 +88,15 @@ Entity {
 
     Entity {
         id: torusEntity
-        components: [ targetLayer, torusMesh, material, torusTransform ]
+        components: [ targetLayerTrans, torusMesh, material, torusTransform ]
+
+        Entity {
+            Transform {
+                id: childTorusTrans
+                translation: Qt.vector3d(5, 6, -20) // change z to 20 verify back-to-front sorting is indeed active
+            }
+            components: [ targetLayerTrans, torusMesh, material, childTorusTrans ]
+        }
     }
 
     SphereMesh {
@@ -82,6 +128,15 @@ Entity {
 
     Entity {
         id: sphereEntity
-        components: [ targetLayer, sphereMesh, material, sphereTransform ]
+        components: [ targetLayerOpaque, sphereMesh, material, sphereTransform ]
+
+        Entity {
+            id: someChildEntity
+            Transform {
+                id: childTr
+                translation: Qt.vector3d(0, 6, 6)
+            }
+            components: [ targetLayerOpaque, sphereMesh, material, childTr ]
+        }
     }
 }

@@ -15,7 +15,8 @@ OTHER_FILES += \
     compositor.frag \
     compositor_ms.frag \
     scene.vert \
-    scene.frag
+    scene_o.frag \
+    scene_t.frag
 
 RESOURCES += \
     q3dpostproc.qrc
