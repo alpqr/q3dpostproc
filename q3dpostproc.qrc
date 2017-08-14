@@ -2,6 +2,7 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>Scene.qml</file>
+        <file>Mat.qml</file>
         <file>OffscreenLayer.qml</file>
         <file>TextureRenderTarget.qml</file>
         <file>TextureRenderTargetMS.qml</file>
