@@ -8,13 +8,15 @@ SOURCES += \
 OTHER_FILES += \
     main.qml \
     Scene.qml \
-    NonLayeredRenderer.qml \
-    LayeredRenderer.qml \
+    OffscreenLayer.qml \
     TextureRenderTarget.qml \
     TextureRenderTargetMS.qml \
     compositor.vert \
     compositor.frag \
-    compositor_ms.frag
+    compositor_ms.frag \
+    scene.vert \
+    scene_o.frag \
+    scene_t.frag
 
 RESOURCES += \
     q3dpostproc.qrc
