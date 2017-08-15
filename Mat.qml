@@ -5,6 +5,8 @@ Material {
     effect: Effect {
         techniques: [
             Technique {
+                FilterKey { id: depthOpaqueKey; name: "pass"; value: "depthOpaque" }
+                FilterKey { id: depthTransKey; name: "pass"; value: "depthTransparent" }
                 FilterKey { id: opaqueKey; name: "pass"; value: "opaque" }
                 FilterKey { id: transKey; name: "pass"; value: "transparent" }
                 graphicsApiFilter {
@@ -20,6 +22,37 @@ Material {
                 // writes, blending enabled and back-to-front sorting.
 
                 renderPasses: [
+                    // Bonus: demonstrate a depth pre-pass
+                    RenderPass {
+                        filterKeys: [ depthOpaqueKey ]
+                        shaderProgram: ShaderProgram {
+                            vertexShaderCode: loadSource("qrc:/depth.vert")
+                            fragmentShaderCode: loadSource("qrc:/depth.frag")
+                        }
+                        renderStates: [
+                            DepthTest {
+                                depthFunction: DepthTest.LessOrEqual
+                            },
+                            ColorMask {
+                                redMasked: false; greenMasked: false; blueMasked: false; alphaMasked: false
+                            }
+                        ]
+                    },
+                    RenderPass {
+                        filterKeys: [ depthTransKey ]
+                        shaderProgram: ShaderProgram {
+                            vertexShaderCode: loadSource("qrc:/depth.vert")
+                            fragmentShaderCode: loadSource("qrc:/depth.frag")
+                        }
+                        renderStates: [
+                            DepthTest {
+                                depthFunction: DepthTest.Always
+                            },
+                            ColorMask {
+                                redMasked: false; greenMasked: false; blueMasked: false; alphaMasked: false
+                            }
+                        ]
+                    },
                     RenderPass {
                         filterKeys: [ opaqueKey ]
                         shaderProgram: ShaderProgram {
