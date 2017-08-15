@@ -53,24 +53,27 @@ RenderTargetSelector {
                     NoDraw { }
                 }
                 RenderPassFilter {
-                    matchAny: [ FilterKey { name: "pass"; value: "depthOpaque" } ]
+                    matchAny: [ FilterKey { name: "pass"; value: "depth" } ]
                     FrustumCulling {
                         LayerFilter {
                             layers: [ sceneLayerOpaque ]
                         }
                     }
                 }
-                RenderPassFilter {
-                    matchAny: [ FilterKey { name: "pass"; value: "depthTransparent" } ]
-                    SortPolicy {
-                        sortTypes: [ SortPolicy.BackToFront ]
-                        FrustumCulling {
-                            LayerFilter {
-                                layers: [ sceneLayerTrans ]
-                            }
-                        }
-                    }
-                }
+                // To help early Z the depth buffer is reused in the later passes (won't be cleared).
+                // This assumes that transparent objects are not in there.
+                // To get a full depth texture suitable for other purposes, reenable this.
+//                RenderPassFilter {
+//                    matchAny: [ FilterKey { name: "pass"; value: "depth" } ]
+//                    SortPolicy {
+//                        sortTypes: [ SortPolicy.BackToFront ]
+//                        FrustumCulling {
+//                            LayerFilter {
+//                                layers: [ sceneLayerTrans ]
+//                            }
+//                        }
+//                    }
+//                }
             }
         }
     }
@@ -83,7 +86,7 @@ RenderTargetSelector {
             // clear first always (opaque list may be empty so ClearBuffers must not be a child there)
             ClearBuffers {
                 clearColor: Qt.rgba(0, 0.5, 1, 1)
-                buffers: ClearBuffers.ColorDepthBuffer
+                buffers: ClearBuffers.ColorBuffer // don't clear depth -> reusing existing depth buffer
                 NoDraw { }
             }
             RenderPassFilter {

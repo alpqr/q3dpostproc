@@ -5,8 +5,7 @@ Material {
     effect: Effect {
         techniques: [
             Technique {
-                FilterKey { id: depthOpaqueKey; name: "pass"; value: "depthOpaque" }
-                FilterKey { id: depthTransKey; name: "pass"; value: "depthTransparent" }
+                FilterKey { id: depthKey; name: "pass"; value: "depth" }
                 FilterKey { id: opaqueKey; name: "pass"; value: "opaque" }
                 FilterKey { id: transKey; name: "pass"; value: "transparent" }
                 graphicsApiFilter {
@@ -24,7 +23,7 @@ Material {
                 renderPasses: [
                     // Bonus: demonstrate a depth pre-pass
                     RenderPass {
-                        filterKeys: [ depthOpaqueKey ]
+                        filterKeys: [ depthKey ]
                         shaderProgram: ShaderProgram {
                             vertexShaderCode: loadSource("qrc:/depth.vert")
                             fragmentShaderCode: loadSource("qrc:/depth.frag")
@@ -32,22 +31,6 @@ Material {
                         renderStates: [
                             DepthTest {
                                 depthFunction: DepthTest.LessOrEqual
-                            },
-                            ColorMask {
-                                redMasked: false; greenMasked: false; blueMasked: false; alphaMasked: false
-                            }
-                        ]
-                    },
-                    // for early Z the transparent pre-pass is probably pointless, but should be there for other uses
-                    RenderPass {
-                        filterKeys: [ depthTransKey ]
-                        shaderProgram: ShaderProgram {
-                            vertexShaderCode: loadSource("qrc:/depth.vert")
-                            fragmentShaderCode: loadSource("qrc:/depth.frag")
-                        }
-                        renderStates: [
-                            DepthTest {
-                                depthFunction: DepthTest.Always
                             },
                             ColorMask {
                                 redMasked: false; greenMasked: false; blueMasked: false; alphaMasked: false
@@ -75,7 +58,7 @@ Material {
                         }
                         renderStates: [
                             DepthTest {
-                                depthFunction: DepthTest.Always // best would be to disable depth testing altogether, but how?
+                                depthFunction: DepthTest.LessOrEqual
                             },
                             NoDepthMask {
                             },
