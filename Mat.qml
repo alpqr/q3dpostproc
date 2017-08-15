@@ -46,6 +46,8 @@ Material {
                         renderStates: [
                             DepthTest {
                                 depthFunction: DepthTest.LessOrEqual
+                            },
+                            NoDepthMask { // because already written by the preceeding depth pass
                             }
                         ]
 

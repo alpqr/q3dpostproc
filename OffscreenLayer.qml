@@ -41,7 +41,7 @@ RenderTargetSelector {
         viewCenter: Qt.vector3d( 0.0, 0.0, 0.0 )
     }
 
-    // Depth pre-pass
+    // Depth pre-pass (opaque objects only)
     RenderTargetSelector {
         target: depthRt
         Viewport {
@@ -60,20 +60,6 @@ RenderTargetSelector {
                         }
                     }
                 }
-                // To help early Z the depth buffer is reused in the later passes (won't be cleared).
-                // This assumes that transparent objects are not in there.
-                // To get a full depth texture suitable for other purposes, reenable this.
-//                RenderPassFilter {
-//                    matchAny: [ FilterKey { name: "pass"; value: "depth" } ]
-//                    SortPolicy {
-//                        sortTypes: [ SortPolicy.BackToFront ]
-//                        FrustumCulling {
-//                            LayerFilter {
-//                                layers: [ sceneLayerTrans ]
-//                            }
-//                        }
-//                    }
-//                }
             }
         }
     }
