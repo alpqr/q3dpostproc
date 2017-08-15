@@ -5,4 +5,4 @@ then an optional back-to-front, blend-enabled, no-depth transparent pass) could 
 offscreen layers.
 
 Additionally, it demonstrates doing a depth pre-pass for the entire scene in order to generate a depth texture
-that can then be used in various ways.
+to help early Z for opaque objects, or for other uses.

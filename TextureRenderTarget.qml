@@ -8,7 +8,7 @@ RenderTarget {
     property real height: 512
 
     property alias colorTexture: colorTexture
-    property alias depthTexture: depthTexture
+    property variant depthTexture
 
     attachments : [
         RenderTargetOutput {
@@ -23,15 +23,8 @@ RenderTarget {
             }
         },
         RenderTargetOutput {
-            attachmentPoint : RenderTargetOutput.Depth
-            texture : Texture2D {
-                id: depthTexture
-                width: rt.width
-                height: rt.height
-                format: Texture.D24
-                minificationFilter: Texture.Linear
-                magnificationFilter: Texture.Linear
-            }
+            attachmentPoint: RenderTargetOutput.Depth
+            texture: depthTexture
         }
     ]
 }

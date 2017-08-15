@@ -38,6 +38,7 @@ Material {
                             }
                         ]
                     },
+                    // for early Z the transparent pre-pass is probably pointless, but should be there for other uses
                     RenderPass {
                         filterKeys: [ depthTransKey ]
                         shaderProgram: ShaderProgram {

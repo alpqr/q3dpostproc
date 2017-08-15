@@ -22,6 +22,7 @@ RenderTargetSelector {
 
     TextureRenderTarget {
         id: rt
+        depthTexture: depthRt.depthTexture
     }
 
     DepthRenderTarget {
