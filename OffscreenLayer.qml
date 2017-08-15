@@ -64,7 +64,7 @@ RenderTargetSelector {
         }
     }
 
-    // Opaque+transparent passes onto the normal render target
+    // Opaque+transparent passes
     Viewport {
         normalizedRect: Qt.rect(0, 0, 1, 1)
         CameraSelector {
